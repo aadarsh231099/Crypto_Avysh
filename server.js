@@ -16,7 +16,7 @@ app.post('/enc', function(req,res){
      const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
      let decryptedData = decipher.update(message1, "hex", "utf-8");
      decryptedData += decipher.final("utf8");
-    res.redirect('/?decrypted=' + decryptedData);
+    res.redirect('/?decrypted2=' + decryptedData);
 });
 
 app.post('/', function(req, res){
@@ -24,7 +24,7 @@ app.post('/', function(req, res){
     const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
     let encryptedData = cipher.update(message, "utf-8", "hex");
     encryptedData += cipher.final("hex");
-    res.redirect('/?encrypted=' + encryptedData);
+    res.redirect('/?encrypted1=' + encryptedData);
   });
 
 const port=3000
