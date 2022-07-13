@@ -30,7 +30,15 @@ const PORT = process.env.PORT || 5000
 app.set('view engine','ejs')
 
 app.get('/',(req,res) => {
+    res.sendFile(__dirname+'/views/start.html');
+})
+
+app.get('/index',(req,res) => {
     res.render('index')
+})
+
+app.get('/index1',(req,res) => {
+    res.render('index1')
 })
 
 app.post('/encode', (req, res) => {
@@ -72,7 +80,7 @@ app.post('/decode', async (req, res) => {
     output = Date.now() + "output"
     upload(req,res,async (err) => {
         if(err) {
-            console.log("Error took place !!!")
+            console.log("Error took place !!")
             return
         }
         else {
