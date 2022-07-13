@@ -72,7 +72,7 @@ app.post('/decode', async (req, res) => {
     output = Date.now() + "output"
     upload(req,res,async (err) => {
         if(err) {
-            console.log("Error took place !!!")
+            console.log("Error took place !")
             return
         }
         else {
