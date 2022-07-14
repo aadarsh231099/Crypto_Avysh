@@ -2,6 +2,8 @@ const express = require('express')
 const multer = require('multer')
 const imageToBase64 = require('image-to-base64');
 const decode = require('node-base64-image').decode
+const NodeRSA = require('node-rsa');
+const key = new NodeRSA({b: 1024});
 const fs = require('fs')
 const path = require('path')
 const bodyparser = require('body-parser');
@@ -10,6 +12,8 @@ const crypto = require('crypto');
 const algorithm = "aes-256-cbc"; 
 const initVector = crypto.randomBytes(16);
 const Securitykey = crypto.randomBytes(32);
+const Blowfish = require('egoroof-blowfish');
+const Encryption = require('node_triple_des');
 
 
 
@@ -100,6 +104,7 @@ app.post('/decode', async (req, res) => {
     })
 })
 
+/*
 app.post('/', function(req, res){
     const message = req.body.name;
     const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
@@ -135,6 +140,52 @@ app.post('/enc', function(req,res){
         res.end();
     });
 });
+*/
+
+app.post('/encrypt',(req,res) => {
+    const {text,type} = req.body;
+    //console.log(text,type);
+    switch(type)
+    {
+        case "rsa": console.log("RSA technique");
+                    var encryptedString = key.encrypt(text,'base64');
+                    console.log("Encrypted text : ",encryptedString);
+                    var decryptedString = key.decrypt(encryptedString,'utf-8');
+                    console.log("Decrypted text : ",decryptedString);
+                    break;
+        
+        case "tdes": console.log("TDES technique");
+                     const encrypt =  Encryption.encrypt('SharedKey',text);
+                     console.log("Encrypted text : ",encrypt);
+                     const decrypt =  Encryption.decrypt('SharedKey', encrypt);
+                     console.log("Decrypted text : ",decrypt);
+                     break;
+
+        case "aes": console.log("AES technique");
+                    const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+                    let encryptedData = cipher.update(text, "utf-8", "hex");
+                    encryptedData += cipher.final("hex");
+                    console.log("Encrypted text : ",encryptedData);
+                    const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
+                    let decryptedData = decipher.update(encryptedData, "hex", "utf-8");
+                    decryptedData += decipher.final("utf8");
+                    console.log("Decrypted text : ",decryptedData);
+                    break;
+
+        case "blowfish": console.log("BLOWFISH technique");
+                         const bf = new Blowfish('super key', Blowfish.MODE.ECB, Blowfish.PADDING.NULL);
+                         const encoded = bf.encode(text);
+                         console.log("Encrypted text : ",encoded);
+                         const decoded = bf.decode(encoded, Blowfish.TYPE.STRING);
+                         console.log("Decrypted text : ",decoded);
+                         break;
+
+        default: console.log("Other technique");
+                 break;    
+    }
+});
+
+
 
 app.listen(PORT, () => {
     console.log("App is listening on port 5000")

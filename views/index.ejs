@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Encryption</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
 </head>
 <body>
 
@@ -20,24 +21,32 @@
             <div class="form-group container">
                 <label for="name">Enter text :</label>
                 <br><br>
-                <input type="text" name="name" placeholder="Enter some text" required><br><br>
+                <input type="text" id="name" name="name" placeholder="Enter some text" required><br><br>
+
                 <label for="technique">Select encryption technique : </label>
-                <select name="technique">
+
+                <select name="technique" id="select">
                     <option value="none" selected disabled hidden>Select one</option>
-                    <option value="op1" name="op1">AES</option>
-                    <option value="op2" name="op2">TDES</option>
-                    <option value="op3" name="op3">RSA</option>
-                    <option value="op4" name="op4">Blowfish</option>
-                    <option value="op5" name="op5">ECC</option>
+                    <option value="rsa" name="rsa">RSA</option>
+                    <option value="tdes" name="tdes">TDES</option>
+                    <option value="aes" name="aes">AES</option>
+                    <option value="blowfish" name="blowfish">Blowfish</option>
                 </select>
+
                 <br>
             </div>
+
             <div class="form-group container">
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" onclick="techselect(document.getElementById('select').value)">
                     Encrypt Text
                 </button>
             </div>
-        
+
+            <br>
+            <div class="form-group container">
+                
+            </div>
+            
             <br><br>
             
         </form>
@@ -58,4 +67,29 @@
     </div>
   
 </body>
+
+<script>
+    function techselect(value) 
+    {
+        const text=document.getElementById("name").value;
+        
+        fetch("/encrypt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "type": `${value}`,
+                "text": `${text}`
+            })
+        })
+
+        .then((res) => {
+        console.log(res)
+        })
+
+        .catch(error => console.log(error));
+    }
+</script>
+
 </html>
