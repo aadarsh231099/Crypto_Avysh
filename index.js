@@ -41,6 +41,10 @@ app.get('/index1',(req,res) => {
     res.render('index1')
 })
 
+app.get('/index2',(req,res) => {
+    res.render('index2')
+})
+
 app.post('/encode', (req, res) => {
         //upload the file
 
