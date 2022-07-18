@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Encryption</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     
 </head>
 <body>
@@ -17,7 +18,7 @@
         </h3>
         <br><br>
 
-        <form action="/" method="post">
+        <!-- <form action="/" method="post"> -->
             <div class="form-group container">
                 <label for="name">Enter text :</label>
                 <br><br>
@@ -34,6 +35,8 @@
                 </select>
 
                 <br>
+                <div id="encryptedText">
+                </div>
             </div>
 
             <div class="form-group container">
@@ -49,20 +52,24 @@
             
             <br><br>
             
-        </form>
+        <!-- </form> -->
 
-        <form action="/enc" method="post">
+        <!-- <form action="/enc" method="post"> -->
             <div class="form-group container">
                 <label for="name1">Encrypted text :</label>
                 <br><br>
-                <input type="text" name="name1" placeholder="Enter encrypted text" required><br><br>
+                <input type="text" id="name1" name="name1" placeholder="Enter encrypted text" required><br><br>
+
+                <div id="decryptedText">
+                </div>
+
             </div>
             <div class="form-group container">
-                <button class="btn btn-success">
+                <button class="btn btn-success" onclick="techselect1(document.getElementById('select').value)">
                     Decrypt Text
                 </button>
             </div>
-        </form>
+       <!-- </form> --> 
         
     </div>
   
@@ -71,24 +78,41 @@
 <script>
     function techselect(value) 
     {
-        const text=document.getElementById("name").value;
-        
-        fetch("/encrypt", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
+        console.log(value);
+        console.log(document.getElementById("name").value);
+        $.ajax({
+            type: 'POST',
+            url: '/encrypt',
+            data: {
+                'text':document.getElementById("name").value,
+                'type':value
             },
-            body: JSON.stringify({
-                "type": `${value}`,
-                "text": `${text}`
-            })
-        })
+            success: function(encryptedText) {
+                var html = '';
+                html += '<h3>Encrypted text is:<h3><h5><b>' + encryptedText + '</b></h5>';
+                $('#encryptedText').html(html);
+            }
+            });
 
-        .then((res) => {
-        console.log(res)
-        })
+    }
+    function techselect1(value) 
+    {
+        console.log(value);
+        console.log(document.getElementById("name1").value);
+        $.ajax({
+            type: 'POST',
+            url: '/decrypt',
+            data: {
+                'text':document.getElementById("name1").value,
+                'type':value
+            },
+            success: function(decryptedText) {
+                var html = '';
+                html += '<h3>Decrypted text is:<h3><h5><b>' + decryptedText + '</b></h5>';
+                $('#decryptedText').html(html);
+            }
+            });
 
-        .catch(error => console.log(error));
     }
 </script>
 

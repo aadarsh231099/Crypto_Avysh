@@ -14,7 +14,8 @@ const initVector = crypto.randomBytes(16);
 const Securitykey = crypto.randomBytes(32);
 const Blowfish = require('egoroof-blowfish');
 const Encryption = require('node_triple_des');
-
+var encryptedString = '';
+var decryptedString = '';
 
 
 var storage = multer.diskStorage({
@@ -144,45 +145,80 @@ app.post('/enc', function(req,res){
 
 app.post('/encrypt',(req,res) => {
     const {text,type} = req.body;
-    //console.log(text,type);
+    console.log(text,type);
     switch(type)
     {
         case "rsa": console.log("RSA technique");
-                    var encryptedString = key.encrypt(text,'base64');
+                    encryptedString = key.encrypt(text,'base64');
                     console.log("Encrypted text : ",encryptedString);
-                    var decryptedString = key.decrypt(encryptedString,'utf-8');
-                    console.log("Decrypted text : ",decryptedString);
                     break;
         
         case "tdes": console.log("TDES technique");
-                     const encrypt =  Encryption.encrypt('SharedKey',text);
-                     console.log("Encrypted text : ",encrypt);
-                     const decrypt =  Encryption.decrypt('SharedKey', encrypt);
-                     console.log("Decrypted text : ",decrypt);
+                     encryptedString =  Encryption.encrypt('SharedKey',text);
+                     console.log("Encrypted text : ",encryptedString);
                      break;
 
         case "aes": console.log("AES technique");
                     const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
                     let encryptedData = cipher.update(text, "utf-8", "hex");
                     encryptedData += cipher.final("hex");
-                    console.log("Encrypted text : ",encryptedData);
-                    const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
-                    let decryptedData = decipher.update(encryptedData, "hex", "utf-8");
-                    decryptedData += decipher.final("utf8");
-                    console.log("Decrypted text : ",decryptedData);
+                    encryptedString=encryptedData;
+                    console.log("Encrypted text : ",encryptedString);
                     break;
 
         case "blowfish": console.log("BLOWFISH technique");
                          const bf = new Blowfish('super key', Blowfish.MODE.ECB, Blowfish.PADDING.NULL);
                          const encoded = bf.encode(text);
-                         console.log("Encrypted text : ",encoded);
-                         const decoded = bf.decode(encoded, Blowfish.TYPE.STRING);
-                         console.log("Decrypted text : ",decoded);
+                         //console.log("Encrypted text : ",encoded);
+                         //var encryptedString = new TextDecoder().decode(encoded);
+                         encryptedString=encoded;
+                         console.log("Encrypted string : ",encryptedString);
+                        //  const decoded = bf.decode(encoded, Blowfish.TYPE.STRING);
+                        //  console.log("Decrypted text : ",decoded);
                          break;
 
         default: console.log("Other technique");
                  break;    
     }
+    res.send(encryptedString);
+});
+
+app.post('/decrypt',(req,res) => {
+    const {text,type} = req.body;
+    console.log(text,type);
+    switch(type)
+    {
+        case "rsa": console.log("RSA technique");
+                    decryptedString = key.decrypt(text,'utf-8');
+                    console.log("Decrypted text : ",decryptedString);
+                    break;
+        
+        case "tdes": console.log("TDES technique");
+                     decryptedString =  Encryption.decrypt('SharedKey', text);
+                     console.log("Decrypted text : ",decryptedString);
+                     break;
+
+        case "aes": console.log("AES technique");
+                    const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
+                    let decryptedData = decipher.update(text, "hex", "utf-8");
+                    decryptedData += decipher.final("utf8");
+                    decryptedString=decryptedData;
+                    console.log("Decrypted text : ",decryptedString);
+                    break;
+
+        case "blowfish": console.log("BLOWFISH technique");
+                         const bf = new Blowfish('super key', Blowfish.MODE.ECB, Blowfish.PADDING.NULL);
+                        //  const encoded = bf.encode(text);
+                        //  console.log("Encrypted text : ",encoded);
+                        //  var uint8array = new TextEncoder().encode(text);
+                         decryptedString = bf.decode(text, Blowfish.TYPE.STRING);
+                         console.log("Decrypted text : ",decryptedString);
+                         break;
+
+        default: console.log("Other technique");
+                 break;    
+    }
+    res.send(decryptedString);
 });
 
 
