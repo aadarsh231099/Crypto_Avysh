@@ -50,56 +50,117 @@ app.get('/index2',(req,res) => {
     res.render('index2')
 })
 
-app.post('/encode', (req, res) => {
-        //upload the file
+// app.post('/encode', (req, res) => {
+//         //upload the file
 
-        output = Date.now() + "output.txt"
-        upload(req, res, (err) => {
-            if (err) {
-                console.log("Some error occured in uploading the file")
-                return
-            }
-            else {
-                console.log(req.file.path)
+//         output = Date.now() + "output.txt"
+//         upload(req, res, (err) => {
+//             if (err) {
+//                 console.log("Some error occured in uploading the file")
+//                 return
+//             }
+//             else {
+//                 console.log(req.file.path)
 
-                //encode to base64
-                imageToBase64(req.file.path) // Path to the image
-                .then(
-                    (response) => {
+//                 //encode to base64
+//                 imageToBase64(req.file.path) // Path to the image
+//                 .then(
+//                     (response) => {
                         
 
-                        fs.writeFileSync(output, response)
+//                         fs.writeFileSync(output, response)
 
-                        res.download(output, () => {
-                            console.log("Base64 File is downloaded")
-                        })
-                    }
-                )
-                .catch(
-                    (error) => {
-                        console.log(error);
-                    }
-                )
-            }
-        })
+//                         res.download(output, () => {
+//                             console.log("Base64 File is downloaded")
+//                         })
+//                     }
+//                 )
+//                 .catch(
+//                     (error) => {
+//                         console.log(error);
+//                     }
+//                 )
+//             }
+//         })
+//     })
+
+//post request
+app.post('/encode', (req, res) => {
+    //upload the file
+    output = Date.now() + "output.txt"
+    upload(req, res, (err) => {
+        if (err) {
+            console.log("some error occoured in uploading the file")
+            return
+        }
+        else {
+            console.log(req.file.path)
+
+            //encode to base64
+            imageToBase64(req.file.path)//Path to the image
+                .then((response) => {
+                    //console.log(response);
+
+                    const encrypt = Encryption.encrypt('SharedKey', response);
+                    //console.log("Encrypted text : ", encrypt);
+
+                    fs.writeFileSync(output, encrypt)
+
+                    res.download(output, () => {
+                        console.log("file is downloaded")
+                    })
+
+                })
+                .catch((error) => {
+                    console.log(error); //Logs an error if there was one 
+                });
+        }
     })
+})
 
+
+// app.post('/decode', async (req, res) => {
+
+//     output = Date.now() + "output"
+//     upload(req,res,async (err) => {
+//         if(err) {
+//             console.log("Error took place !!")
+//             return
+//         }
+//         else {
+//             console.log(req.file.path)
+
+//             const base64code = fs.readFileSync(req.file.path, "utf-8")
+//             await decode(base64code, { fname: output, ext: 'jpg' });
+
+//             res.download(output + ".jpg", () => {
+//                 console.log("Image File is downloaded")
+//             })
+//         }
+//     })
+// })
+//post request for decode
 app.post('/decode', async (req, res) => {
 
     output = Date.now() + "output"
-    upload(req,res,async (err) => {
-        if(err) {
-            console.log("Error took place !!")
+    upload(req, res, async (err) => {
+        if (err) {
+            console.log("an error took place")
             return
         }
         else {
             console.log(req.file.path)
 
             const base64code = fs.readFileSync(req.file.path, "utf-8")
-            await decode(base64code, { fname: output, ext: 'jpg' });
+            //console.log(base64code);
+            const decrypt = Encryption.decrypt('SharedKey', base64code);
+            //console.log("Decrypted text : ", decrypt);
+            
+
+            await decode(decrypt, { fname: output, ext: "jpg" });
 
             res.download(output + ".jpg", () => {
-                console.log("Image File is downloaded")
+                console.log("file is downloaded")
             })
         }
     })
