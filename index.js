@@ -166,6 +166,60 @@ app.post('/decode', async (req, res) => {
     })
 })
 
+app.post('/encode1', (req, res) => {
+    //upload the file
+
+    output = Date.now() + "output.txt"
+    upload(req, res, (err) => {
+        if (err) {
+            console.log("Some error occured in uploading the file")
+            return
+        }
+        else {
+            console.log(req.file.path)
+
+            const pdf2base64 = require('pdf-to-base64');
+            pdf2base64(req.file.path) // Path to the image
+            .then(
+                (response) => {
+                    encryptedString = key.encrypt(response,'base64');
+                    fs.writeFileSync(output, encryptedString)
+
+                    res.download(output, () => {
+                        console.log("Base64 File is downloaded")
+                    })
+                }
+            )
+            .catch(
+                (error) => {
+                    console.log(error);
+                }
+            )
+        }
+    })
+})
+
+app.post('/decode1', async (req, res) => {
+
+output = Date.now() + "output"
+upload(req,res,async (err) => {
+    if(err) {
+        console.log("Error took place !!")
+        return
+    }
+    else {
+        console.log(req.file.path)
+
+        const base64code = fs.readFileSync(req.file.path, "utf-8")
+        decryptedString = key.decrypt(base64code,'utf-8');
+        await decode(decryptedString, { fname: output, ext: 'pdf' });
+
+        res.download(output + ".pdf", () => {
+            console.log(" File is downloaded")
+        })
+    }
+})
+})
 /*
 app.post('/', function(req, res){
     const message = req.body.name;
