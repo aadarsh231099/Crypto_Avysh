@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Encryption</title>
+    <title>File Encryption</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
         body {
@@ -20,7 +20,7 @@
 
         }
 
-        a {
+        button {
             position: relative;
             display: inline-block;
             padding: 15px 30px;
@@ -31,7 +31,7 @@
             font-size: 24px;
         }
 
-        a:hover {
+        button:hover {
             color: #255784;
             box-shadow: 0 0 10px #eaedf0, 0 0 40px #eaedf0, 0 0 80px #eaedf0;
         }
@@ -41,19 +41,19 @@
 <body>
     <div class="container">
         <h1 class="text-center" style="color: #ffff;">
-            <e>File Encryption & Decryption</e>
+            <em><u>File Encryption & Decryption</u></em>
         </h1>
         <br><br>
         <form action="/encode1" method="post" enctype="multipart/form-data">
             <div class="form-group container">
-                <label for="file"style="color: #ffff;">Upload File :</label>
+                <label for="file"style="color: #ffff;"><em>Upload File :</em></label>
                 <br><br>
                 <input class="form-control" type="file" name="file" style="width: 30%;" id="" required>
             </div> 
             <br>
             <div class="form-group container">
                 <button class="btn btn-primary">
-                    Encode File
+                    Encrypt File
                 </button>
             </div>
         </form>
@@ -61,7 +61,7 @@
         <form action="/decode1" method="post" enctype="multipart/form-data">
             <div class="form-group container">
                 <br><br>
-                <label for="file"style="color: #ffff;">Upload Encrypted File :</label>
+                <label for="file"style="color: #ffff;"><em>Upload Encrypted File :</em></label>
                 <br><br>
                 <input class="form-control" type="file" name="file" id="" style="width: 30%;" required>
             </div>

@@ -12,7 +12,6 @@ const crypto = require('crypto');
 const algorithm = "aes-256-cbc"; 
 const initVector = crypto.randomBytes(16);
 const Securitykey = crypto.randomBytes(32);
-const Blowfish = require('egoroof-blowfish');
 const Encryption = require('node_triple_des');
 var encryptedString = '';
 var decryptedString = '';
@@ -50,214 +49,6 @@ app.get('/index2',(req,res) => {
     res.render('index2')
 })
 
-// app.post('/encode', (req, res) => {
-//         //upload the file
-
-//         output = Date.now() + "output.txt"
-//         upload(req, res, (err) => {
-//             if (err) {
-//                 console.log("Some error occured in uploading the file")
-//                 return
-//             }
-//             else {
-//                 console.log(req.file.path)
-
-//                 //encode to base64
-//                 imageToBase64(req.file.path) // Path to the image
-//                 .then(
-//                     (response) => {
-                        
-
-//                         fs.writeFileSync(output, response)
-
-//                         res.download(output, () => {
-//                             console.log("Base64 File is downloaded")
-//                         })
-//                     }
-//                 )
-//                 .catch(
-//                     (error) => {
-//                         console.log(error);
-//                     }
-//                 )
-//             }
-//         })
-//     })
-
-//post request
-app.post('/encode', (req, res) => {
-    //upload the file
-    output = Date.now() + "output.txt"
-    upload(req, res, (err) => {
-        if (err) {
-            console.log("some error occoured in uploading the file")
-            return
-        }
-        else {
-            console.log(req.file.path)
-
-            //encode to base64
-            imageToBase64(req.file.path)//Path to the image
-                .then((response) => {
-                    //console.log(response);
-
-                    const encrypt = Encryption.encrypt('SharedKey', response);
-                    //console.log("Encrypted text : ", encrypt);
-
-                    fs.writeFileSync(output, encrypt)
-
-                    res.download(output, () => {
-                        console.log("file is downloaded")
-                    })
-
-                })
-                .catch((error) => {
-                    console.log(error); //Logs an error if there was one 
-                });
-        }
-    })
-})
-
-
-// app.post('/decode', async (req, res) => {
-
-//     output = Date.now() + "output"
-//     upload(req,res,async (err) => {
-//         if(err) {
-//             console.log("Error took place !!")
-//             return
-//         }
-//         else {
-//             console.log(req.file.path)
-
-//             const base64code = fs.readFileSync(req.file.path, "utf-8")
-//             await decode(base64code, { fname: output, ext: 'jpg' });
-
-//             res.download(output + ".jpg", () => {
-//                 console.log("Image File is downloaded")
-//             })
-//         }
-//     })
-// })
-//post request for decode
-app.post('/decode', async (req, res) => {
-
-    output = Date.now() + "output"
-    upload(req, res, async (err) => {
-        if (err) {
-            console.log("an error took place")
-            return
-        }
-        else {
-            console.log(req.file.path)
-
-            const base64code = fs.readFileSync(req.file.path, "utf-8")
-            //console.log(base64code);
-            const decrypt = Encryption.decrypt('SharedKey', base64code);
-            //console.log("Decrypted text : ", decrypt);
-            
-
-            await decode(decrypt, { fname: output, ext: "jpg" });
-
-            res.download(output + ".jpg", () => {
-                console.log("file is downloaded")
-            })
-        }
-    })
-})
-
-app.post('/encode1', (req, res) => {
-    //upload the file
-
-    output = Date.now() + "output.txt"
-    upload(req, res, (err) => {
-        if (err) {
-            console.log("Some error occured in uploading the file")
-            return
-        }
-        else {
-            console.log(req.file.path)
-
-            const pdf2base64 = require('pdf-to-base64');
-            pdf2base64(req.file.path) // Path to the image
-            .then(
-                (response) => {
-                    encryptedString = key.encrypt(response,'base64');
-                    fs.writeFileSync(output, encryptedString)
-
-                    res.download(output, () => {
-                        console.log("Base64 File is downloaded")
-                    })
-                }
-            )
-            .catch(
-                (error) => {
-                    console.log(error);
-                }
-            )
-        }
-    })
-})
-
-app.post('/decode1', async (req, res) => {
-
-output = Date.now() + "output"
-upload(req,res,async (err) => {
-    if(err) {
-        console.log("Error took place !!")
-        return
-    }
-    else {
-        console.log(req.file.path)
-
-        const base64code = fs.readFileSync(req.file.path, "utf-8")
-        decryptedString = key.decrypt(base64code,'utf-8');
-        await decode(decryptedString, { fname: output, ext: 'pdf' });
-
-        res.download(output + ".pdf", () => {
-            console.log(" File is downloaded")
-        })
-    }
-})
-})
-/*
-app.post('/', function(req, res){
-    const message = req.body.name;
-    const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
-    let encryptedData = cipher.update(message, "utf-8", "hex");
-    encryptedData += cipher.final("hex");
-    //res.redirect('/?encrypted1=' + encryptedData);
-    res.setHeader('Content-type', 'text/html');
-    fs.readFile('./views/index.ejs', (err, html) => {
-        if (err)
-            res.write("Error");
-        else{
-            res.write(html);
-            res.write('<div class="form-group container"><h3>Encrypted Text:</h3><h3>'+encryptedData+'</h3><br><br>');
-             }
-        res.end();
-    });
-  });
-
-app.post('/enc', function(req,res){
-    const message1 = req.body.name1;
-    const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
-    let decryptedData = decipher.update(message1, "hex", "utf-8");
-    decryptedData += decipher.final("utf8");
-    // res.redirect('/?decrypted2=' + decryptedData);
-    res.setHeader('Content-type', 'text/html');
-    fs.readFile('./views/index.ejs', (err, html) => {
-        if (err)
-            res.write("Error");
-        else {
-            res.write(html);
-            res.write('<div class="form-group container"><h3>Decrypted Text:</h3><h3>'+decryptedData+'</h3><br><br>');
-        }
-        res.end();
-    });
-});
-*/
-
 app.post('/encrypt',(req,res) => {
     const {text,type} = req.body;
     console.log(text,type);
@@ -280,17 +71,6 @@ app.post('/encrypt',(req,res) => {
                     encryptedString=encryptedData;
                     console.log("Encrypted text : ",encryptedString);
                     break;
-
-        case "blowfish": console.log("BLOWFISH technique");
-                         const bf = new Blowfish('super key', Blowfish.MODE.ECB, Blowfish.PADDING.NULL);
-                         const encoded = bf.encode(text);
-                         //console.log("Encrypted text : ",encoded);
-                         //var encryptedString = new TextDecoder().decode(encoded);
-                         encryptedString=encoded;
-                         console.log("Encrypted string : ",encryptedString);
-                        //  const decoded = bf.decode(encoded, Blowfish.TYPE.STRING);
-                        //  console.log("Decrypted text : ",decoded);
-                         break;
 
         default: console.log("Other technique");
                  break;    
@@ -321,22 +101,126 @@ app.post('/decrypt',(req,res) => {
                     console.log("Decrypted text : ",decryptedString);
                     break;
 
-        case "blowfish": console.log("BLOWFISH technique");
-                         const bf = new Blowfish('super key', Blowfish.MODE.ECB, Blowfish.PADDING.NULL);
-                        //  const encoded = bf.encode(text);
-                        //  console.log("Encrypted text : ",encoded);
-                        //  var uint8array = new TextEncoder().encode(text);
-                         decryptedString = bf.decode(text, Blowfish.TYPE.STRING);
-                         console.log("Decrypted text : ",decryptedString);
-                         break;
-
         default: console.log("Other technique");
                  break;    
     }
     res.send(decryptedString);
 });
 
+//post request
+app.post('/encode', (req, res) => {
+    //upload the file
+    output = Date.now() + "output.txt"
+    upload(req, res, (err) => {
+        if (err) {
+            console.log("some error occoured in uploading the file")
+            return
+        }
+        else {
+            console.log(req.file.path)
 
+            //encode to base64
+            imageToBase64(req.file.path)//Path to the image
+                .then((response) => {
+
+                    const encrypt = Encryption.encrypt('SharedKey', response);
+
+                    fs.writeFileSync(output, encrypt)
+
+                    res.download(output, () => {
+                        console.log("file is downloaded")
+                    })
+
+                })
+                .catch((error) => {
+                    console.log(error); //Logs an error if there was one 
+                });
+        }
+    })
+})
+
+//post request for decode
+app.post('/decode', async (req, res) => {
+
+    output = Date.now() + "output"
+    upload(req, res, async (err) => {
+        if (err) {
+            console.log("an error took place")
+            return
+        }
+        else {
+            console.log(req.file.path)
+
+            const base64code = fs.readFileSync(req.file.path, "utf-8")
+            
+            const decrypt = Encryption.decrypt('SharedKey', base64code);
+            
+            await decode(decrypt, { fname: output, ext: "jpg" });
+
+            res.download(output + ".jpg", () => {
+                console.log("file is downloaded")
+            })
+        }
+    })
+})
+
+app.post('/encode1', (req, res) => {
+    //upload the file
+
+    output = Date.now() + "output.txt"
+    upload(req, res, (err) => {
+        if (err) {
+            console.log("Some error occured in uploading the file")
+            return
+        }
+        else {
+            console.log(req.file.path)
+
+            const pdf2base64 = require('pdf-to-base64');
+            pdf2base64(req.file.path) // Path to the image
+            .then(
+                (response) => {
+                    encryptedString = key.encrypt(response,'base64');
+
+                    fs.writeFileSync(output, encryptedString)
+
+                    res.download(output, () => {
+                        console.log("Base64 File is downloaded")
+                    })
+                }
+            )
+            .catch(
+                (error) => {
+                    console.log(error);
+                }
+            )
+        }
+    })
+})
+
+app.post('/decode1', async (req, res) => {
+
+output = Date.now() + "output"
+upload(req,res,async (err) => {
+    if(err) {
+        console.log("Error took place !!")
+        return
+    }
+    else {
+        console.log(req.file.path)
+
+        const base64code = fs.readFileSync(req.file.path, "utf-8")
+
+        decryptedString = key.decrypt(base64code,'utf-8');
+
+        await decode(decryptedString, { fname: output, ext: 'pdf' });
+
+        res.download(output + ".pdf", () => {
+            console.log(" File is downloaded")
+        })
+    }
+})
+})
 
 app.listen(PORT, () => {
     console.log("App is listening on port 5000")
