@@ -7,24 +7,47 @@
     <title>Text Encryption</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    
+    <style>
+        body {
+            background-image: url('https://www.thomsonreuters.com/en-us/posts/wp-content/uploads/sites/20/2021/05/QA-Bock-image-800x450.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            
+        }
+        button {
+            position: relative;
+            display: inline-block;
+            padding: 15px 30px;
+            color: #2196f3;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        button:hover {
+            color: #255784;
+            box-shadow: 0 0 10px #eaedf0, 0 0 40px #eaedf0, 0 0 80px #eaedf0;
+        }
+    </style>    
 </head>
 <body>
 
     <div class="container">
         <br>
-        <h3 class="text-center">
-            Text Encryption & Decryption
-        </h3>
+        <h1 class="text-center" style="color: #ffff;">
+            <e>Text Encryption & Decryption</e>
+        </h1>
         <br><br>
 
         <!-- <form action="/" method="post"> -->
             <div class="form-group container">
-                <label for="name">Enter text :</label>
+                <label for="name" style="color: #ffff;">Enter text :</label>
                 <br><br>
                 <input type="text" id="name" name="name" placeholder="Enter some text" required><br><br>
 
-                <label for="technique">Select encryption technique : </label>
+                <label for="technique"style="color: #ffff;">Select encryption technique : </label>
 
                 <select name="technique" id="select">
                     <option value="none" selected disabled hidden>Select one</option>
@@ -35,7 +58,7 @@
                 </select>
 
                 <br>
-                <div id="encryptedText">
+                <div id="encryptedText" style="color: #ffff; width: 50%; word-wrap:break-word;">
                 </div>
             </div>
 
@@ -56,11 +79,11 @@
 
         <!-- <form action="/enc" method="post"> -->
             <div class="form-group container">
-                <label for="name1">Encrypted text :</label>
+                <label for="name1" style="color: #ffff;">Encrypted text :</label>
                 <br><br>
                 <input type="text" id="name1" name="name1" placeholder="Enter encrypted text" required><br><br>
 
-                <div id="decryptedText">
+                <div id="decryptedText" style=" color:#ffff; width:50%;">
                 </div>
 
             </div>

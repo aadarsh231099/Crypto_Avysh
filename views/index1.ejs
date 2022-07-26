@@ -6,24 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Encryption</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://www.woodmac.com/siteassets/article-images/2019/q2/homepage-image-v2.png?width=800&height=400&mode=crop&center=0.5,0.5');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            
+        }
+        button {
+            position: relative;
+            display: inline-block;
+            padding: 15px 30px;
+            color: #2196f3;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        button:hover {
+            color: #255784;
+            box-shadow: 0 0 10px #eaedf0, 0 0 40px #eaedf0, 0 0 80px #eaedf0;
+        }
+    </style>   
 </head>
 <body>
     <div class="container">
-        <h3 class="text-center">
-            Image Encryption & Decryption
-        </h3>
+        <h1 class="text-center" style="color: #ffff;">
+            <e>Image Encryption & Decryption</e>
+        </h1>
         <br><br>
 
         <form action="/encode" method="post" enctype="multipart/form-data">
-            <div class="form-group container">
-                <label for="file">Upload File :</label>
+            <div class="form-group container"style="color: #ffff;">
+                <label for="file">Upload Image :</label>
                 <br><br>
-                <input class="form-control" type="file" name="file" id="" required>
+                <input class="form-control" type="file" name="file" id="" style="width: 30%;" required>
             </div> 
             <br>
             <div class="form-group container">
                 <button class="btn btn-primary">
-                    Encode Image
+                    Encrypt Image
                 </button>
             </div>
         </form>
@@ -31,14 +55,14 @@
         <form action="/decode" method="post" enctype="multipart/form-data">
             <div class="form-group container">
                 <br><br>
-                <label for="file">Upload Base64 Code File :</label>
+                <label for="file"style="color: #ffff;">Upload Encrypted Image :</label>
                 <br><br>
-                <input class="form-control" type="file" name="file" id="" required>
+                <input class="form-control" type="file" name="file" id="" style="width: 30%;" required>
             </div>
             <br>
             <div class="form-group container">
                 <button class="btn btn-success">
-                    Decode Base64
+                    Decrypt Image
                 </button>
             </div>
         </form>
