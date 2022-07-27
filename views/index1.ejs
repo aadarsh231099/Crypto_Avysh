@@ -20,7 +20,7 @@
             padding: 15px 30px;
             color: #2196f3;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
             text-decoration: none;
             font-size: 24px;
         }
@@ -34,13 +34,13 @@
 <body>
     <div class="container">
         <h1 class="text-center" style="color: #ffff;">
-            <em>Image Encryption & Decryption</em>
+            Image Encryption & Decryption
         </h1>
         <br><br>
 
         <form action="/encode" method="post" enctype="multipart/form-data">
             <div class="form-group container"style="color: #ffff;">
-                <label for="file"><em>Upload Image :</em></label>
+                <label for="file">Upload Image :</label>
                 <br><br>
                 <input class="form-control" type="file" name="file" id="" style="width: 30%;" required>
             </div> 
@@ -55,7 +55,7 @@
         <form action="/decode" method="post" enctype="multipart/form-data">
             <div class="form-group container">
                 <br><br>
-                <label for="file"style="color: #ffff;"><em>Upload Encrypted Image :</em></label>
+                <label for="file"style="color: #ffff;">Upload Encrypted Image :</label>
                 <br><br>
                 <input class="form-control" type="file" name="file" id="" style="width: 30%;" required>
             </div>
