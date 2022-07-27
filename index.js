@@ -119,14 +119,16 @@ app.post('/encode', (req, res) => {
         else {
             console.log(req.file.path)
 
-            //encode to base64
+            //convert the image to base64 and encrypt the base64 code using tdes technique
             imageToBase64(req.file.path)//Path to the image
                 .then((response) => {
 
+                    //tdes technique
                     const encrypt = Encryption.encrypt('SharedKey', response);
 
                     fs.writeFileSync(output, encrypt)
 
+                    //download the encrypted code
                     res.download(output, () => {
                         console.log("file is downloaded")
                     })
@@ -149,6 +151,7 @@ app.post('/decode', async (req, res) => {
             return
         }
         else {
+            //take the encrypted base64 code and decrypt using tdes technique and convert the base64 code to the original image
             console.log(req.file.path)
 
             const base64code = fs.readFileSync(req.file.path, "utf-8")
@@ -157,6 +160,7 @@ app.post('/decode', async (req, res) => {
             
             await decode(decrypt, { fname: output, ext: "jpg" });
 
+            //download the decryptrd image
             res.download(output + ".jpg", () => {
                 console.log("file is downloaded")
             })
@@ -176,14 +180,17 @@ app.post('/encode1', (req, res) => {
         else {
             console.log(req.file.path)
 
+            //convert the pdf to base64 and encrypt the base64 code using rsa technique
             const pdf2base64 = require('pdf-to-base64');
             pdf2base64(req.file.path) // Path to the image
             .then(
                 (response) => {
+                    //rsa technique
                     encryptedString = key.encrypt(response,'base64');
 
                     fs.writeFileSync(output, encryptedString)
 
+                    //download the encrypted code
                     res.download(output, () => {
                         console.log("Base64 File is downloaded")
                     })
@@ -207,6 +214,7 @@ upload(req,res,async (err) => {
         return
     }
     else {
+        //take the encrypted base64 code and decrypt using rsa technique and convert the base64 code to the original pdf
         console.log(req.file.path)
 
         const base64code = fs.readFileSync(req.file.path, "utf-8")
@@ -215,6 +223,7 @@ upload(req,res,async (err) => {
 
         await decode(decryptedString, { fname: output, ext: 'pdf' });
 
+        //download the decrypted pdf
         res.download(output + ".pdf", () => {
             console.log(" File is downloaded")
         })
