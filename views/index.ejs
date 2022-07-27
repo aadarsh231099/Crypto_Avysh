@@ -41,8 +41,8 @@
         </h1>
         <br><br>
 
-        <!-- <form action="/" method="post"> -->
-            <div class="form-group container">
+            <!--frontend to input text and select technique-->
+            <div class="form-group container">        
                 <label for="name" style="color: #ffff;">Enter text :</label>
                 <br><br>
                 <input type="text" id="name" name="name" placeholder="Enter some text" required><br><br>
@@ -72,6 +72,7 @@
                 
             </div>
 
+            <!--frontend to input encrypted text and decrypt using selected technique-->
             <div class="form-group container">
                 <label for="name1" style="color: #ffff;">Encrypted text :</label>
                 <br><br>
@@ -92,7 +93,7 @@
 </body>
 
 <script>
-    function techselect(value) 
+    function techselect(value)                      //ajax call for text encryption
     {
         console.log(value);
         console.log(document.getElementById("name").value);
@@ -103,7 +104,7 @@
                 'text':document.getElementById("name").value,
                 'type':value
             },
-            success: function(encryptedText) {
+            success: function(encryptedText) {               //displaying the encrypted text on webpage
                 var html = '';
                 html += '<h3>Encrypted text is:<h3><h5><b>' + encryptedText + '</b></h5>';
                 $('#encryptedText').html(html);
@@ -111,7 +112,7 @@
             });
 
     }
-    function techselect1(value) 
+    function techselect1(value)                         //ajax call for text decryption
     {
         console.log(value);
         console.log(document.getElementById("name1").value);
@@ -122,10 +123,10 @@
                 'text':document.getElementById("name1").value,
                 'type':value
             },
-            success: function(decryptedText) {
+            success: function(decryptedText) {              //displaying the decrypted text on webpage
                 var html = '';
                 html += '<h3>Decrypted text is:<h3><h5><b>' + decryptedText + '</b></h5>';
-                $('#decryptedText').html(html);
+                $('#decryptedText').html(html);  
             }
             });
 

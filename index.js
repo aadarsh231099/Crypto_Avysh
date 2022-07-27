@@ -26,33 +26,34 @@ var storage = multer.diskStorage({
     },
   });
   
-var upload = multer({ storage: storage }).single('file');
+var upload = multer({ storage: storage }).single('file');         //storage variable for uploaded file
 app.use(bodyparser.urlencoded({extended:false}))
 app.use(bodyparser.json())
 app.use(express.static('public/uploads'))
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000                            //setting port value to 5000
 app.set('view engine','ejs')
 
 app.get('/',(req,res) => {
-    res.sendFile(__dirname+'/views/start.html');
+    res.sendFile(__dirname+'/views/start.html');          //route to the main page
 })
 
 app.get('/index',(req,res) => {
-    res.render('index')
+    res.render('index')                                   //route to the text encryption
 })
 
 app.get('/index1',(req,res) => {
-    res.render('index1')
+    res.render('index1')                                  //route to the image encryption
 })
 
 app.get('/index2',(req,res) => {
-    res.render('index2')
+    res.render('index2')                                  //route to the file encryption
 })
 
+//post request for text encryption
 app.post('/encrypt',(req,res) => {
-    const {text,type} = req.body;
+    const {text,type} = req.body;              //taking the text and the type as input from frontend
     console.log(text,type);
-    switch(type)
+    switch(type)                               //different text encryption techniques
     {
         case "rsa": console.log("RSA technique");
                     encryptedString = key.encrypt(text,'base64');
@@ -75,9 +76,10 @@ app.post('/encrypt',(req,res) => {
         default: console.log("Other technique");
                  break;    
     }
-    res.send(encryptedString);
+    res.send(encryptedString);                   //sending the encrypted text back to the frontend
 });
 
+//post request for text decryption
 app.post('/decrypt',(req,res) => {
     const {text,type} = req.body;
     console.log(text,type);
@@ -104,10 +106,10 @@ app.post('/decrypt',(req,res) => {
         default: console.log("Other technique");
                  break;    
     }
-    res.send(decryptedString);
+    res.send(decryptedString);                          //sending the decrypted text back to the frontend
 });
 
-//post request
+//post request for image encryption
 app.post('/encode', (req, res) => {
     //upload the file
     output = Date.now() + "output.txt"
@@ -119,29 +121,28 @@ app.post('/encode', (req, res) => {
         else {
             console.log(req.file.path)
 
-            //convert the image to base64 and encrypt the base64 code using tdes technique
-            imageToBase64(req.file.path)//Path to the image
+            //Encryption of the uploaded image using TDES technique
+            imageToBase64(req.file.path)                           //Path to the image
                 .then((response) => {
 
-                    //tdes technique
                     const encrypt = Encryption.encrypt('SharedKey', response);
 
                     fs.writeFileSync(output, encrypt)
 
-                    //download the encrypted code
+                    //download the encrypted image
                     res.download(output, () => {
                         console.log("file is downloaded")
                     })
 
                 })
                 .catch((error) => {
-                    console.log(error); //Logs an error if there was one 
+                    console.log(error);                     //Logs an error if there was one 
                 });
         }
     })
 })
 
-//post request for decode
+//post request for image decryption
 app.post('/decode', async (req, res) => {
 
     output = Date.now() + "output"
@@ -151,7 +152,7 @@ app.post('/decode', async (req, res) => {
             return
         }
         else {
-            //take the encrypted base64 code and decrypt using tdes technique and convert the base64 code to the original image
+             //Decryption of the encrypted image using TDES technique
             console.log(req.file.path)
 
             const base64code = fs.readFileSync(req.file.path, "utf-8")
@@ -160,7 +161,7 @@ app.post('/decode', async (req, res) => {
             
             await decode(decrypt, { fname: output, ext: "jpg" });
 
-            //download the decryptrd image
+            //download the decrypted image
             res.download(output + ".jpg", () => {
                 console.log("file is downloaded")
             })
@@ -168,6 +169,7 @@ app.post('/decode', async (req, res) => {
     })
 })
 
+//post request for file encryption
 app.post('/encode1', (req, res) => {
     //upload the file
 
@@ -180,17 +182,17 @@ app.post('/encode1', (req, res) => {
         else {
             console.log(req.file.path)
 
-            //convert the pdf to base64 and encrypt the base64 code using rsa technique
+            //Encryption of the uploaded file using RSA technique
             const pdf2base64 = require('pdf-to-base64');
-            pdf2base64(req.file.path) // Path to the image
+            pdf2base64(req.file.path)                      // Path to the file
             .then(
                 (response) => {
-                    //rsa technique
+                    
                     encryptedString = key.encrypt(response,'base64');
 
                     fs.writeFileSync(output, encryptedString)
 
-                    //download the encrypted code
+                    //download the encrypted file
                     res.download(output, () => {
                         console.log("Base64 File is downloaded")
                     })
@@ -205,6 +207,7 @@ app.post('/encode1', (req, res) => {
     })
 })
 
+//post request for file decryption
 app.post('/decode1', async (req, res) => {
 
 output = Date.now() + "output"
@@ -214,7 +217,7 @@ upload(req,res,async (err) => {
         return
     }
     else {
-        //take the encrypted base64 code and decrypt using rsa technique and convert the base64 code to the original pdf
+        //Decryption of the encrypted file using RSA technique
         console.log(req.file.path)
 
         const base64code = fs.readFileSync(req.file.path, "utf-8")
@@ -230,7 +233,7 @@ upload(req,res,async (err) => {
     }
 })
 })
-
+//Listening to port 5000
 app.listen(PORT, () => {
     console.log("App is listening on port 5000")
 })
