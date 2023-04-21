@@ -16,49 +16,62 @@
         }
 
         button {
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
             position: relative;
             display: inline-block;
             padding: 10px 10px;
-            color:#000;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-decoration: none;
-            font-size: 14px;
+            background-color: #00bfff96;
+            border-radius: 10px;
         }
 
+        .button2 {background-color: #00b606c6;}
+        .button3 {background-color: #ff0000a9;}
+
         button:hover {
-            color: #255784;
-            box-shadow: 0 0 10px #eaedf0, 0 0 40px #eaedf0, 0 0 80px #eaedf0;
+            box-shadow: 0 0 5px #eaedf0, 0 0 20px #eaedf0, 0 0 40px #eaedf0;
         }
+
         .hero{
             min-height: 90vh;
             width: 100%;
-            background-color: #000;
-            background-image: url(https://s3.amazonaws.com/media-p.slid.es/uploads/111493/images/1917323/dribbble_problem-solved.gif);
+            background-image: url(https://images.ctfassets.net/yewqr8zk7e5s/migrated-4572/61ee98fb5087c9873948b5473cfafb16/encryption-encoding-hashing.jpg?w=1000&h=559&fl=progressive&q=50&fm=jpg); 
             background-position: center;
             background-repeat: no-repeat;
             background-size: 100%;
             color: #fff;
             padding: 0 8%;
         }
+
     </style>
 </head>
 
 <body class="hero">
-    <div class="header">
 
-    </div>
+    <div class="header"></div>
+
     <div class="cont">
+
         <div class="w3-cursive">
-            <h1 class="text-center" style="color: #fff; font-size: 60px;">
+            <h1 class="text-center" style="color: #fff; font-family:'Times New Roman', Times, serif; font-size: 60px; padding-top: 35px; text-shadow: 2px 2px 4px rgb(217, 216, 216);">
                 <b>Encrypt-O-Decrypt</b>
             </h1>
         </div>
+
         <div class="type">
+
             <br><br><br>
 
             <a href="index">
-                <button>
+                <button class="button">
                     <b>Text Encryption</b>                 <!--Redirects to Text Encryption Page-->
                 </button>
             </a>
@@ -66,7 +79,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="index1">
-                <button>
+                <button class="button button2">
                     <b>Image Encryption</b>                <!--Redirects to Image Encryption Page-->
                 </button>
             </a>
@@ -74,17 +87,16 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="index2">
-                <button>
+                <button class="button button3">
                     <b>File Encryption</b>                 <!--Redirects to File Encryption Page-->
                 </button>
             </a>
 
         </div>
-    </div>
-    <div class="footer">
 
     </div>
 
+    <div class="footer"></div>
 
 </body>
 

@@ -115,7 +115,7 @@ app.post('/encode', (req, res) => {
     output = Date.now() + "output.txt"
     upload(req, res, (err) => {
         if (err) {
-            console.log("some error occoured in uploading the file")
+            console.log("some error occoured in uploading the file",err)
             return
         }
         else {
@@ -233,6 +233,7 @@ upload(req,res,async (err) => {
     }
 })
 })
+
 //Listening to port 5000
 app.listen(PORT, () => {
     console.log("App is listening on port 5000")
